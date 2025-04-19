@@ -1,6 +1,8 @@
 package com.gesacademy.patientservice.service;
 
+import com.gesacademy.patientservice.dto.PatientRequestDTO;
 import com.gesacademy.patientservice.dto.PatientResponseDTO;
+import com.gesacademy.patientservice.exception.EmailAlreadyExistsException;
 import com.gesacademy.patientservice.mapper.PatientMapper;
 import com.gesacademy.patientservice.model.Patient;
 import com.gesacademy.patientservice.repository.PatientRepository;
