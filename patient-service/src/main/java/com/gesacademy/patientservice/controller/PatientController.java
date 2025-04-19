@@ -24,4 +24,10 @@ public class PatientController {
         List<PatientResponseDTO> patients = patientService.getAllPatients();
         return ResponseEntity.ok().body(patients);
     }
+
+    @PostMapping
+    public ResponseEntity<PatientResponseDTO> createPatient(@Valid @RequestBody PatientRequestDTO patientRequestDTO) {
+        PatientResponseDTO patient = patientService.createPatient(patientRequestDTO);
+        return ResponseEntity.ok().body(patient);
+    }
 }
