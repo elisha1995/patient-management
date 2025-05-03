@@ -5,6 +5,7 @@ import com.gesacademy.patientservice.dto.PatientResponseDTO;
 import com.gesacademy.patientservice.exception.EmailAlreadyExistsException;
 import com.gesacademy.patientservice.exception.PatientNotFoundException;
 import com.gesacademy.patientservice.grpc.BillingServiceGrpcClient;
+import com.gesacademy.patientservice.kafka.KafkaProducer;
 import com.gesacademy.patientservice.mapper.PatientMapper;
 import com.gesacademy.patientservice.model.Patient;
 import com.gesacademy.patientservice.repository.PatientRepository;
@@ -18,11 +19,14 @@ import java.util.UUID;
 public class PatientService {
     private final PatientRepository patientRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
+    private final KafkaProducer kafkaProducer;
 
 
-    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient,
+                         KafkaProducer kafkaProducer) {
         this.patientRepository = patientRepository;
         this.billingServiceGrpcClient = billingServiceGrpcClient;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public List<PatientResponseDTO> getAllPatients() {
@@ -44,6 +48,7 @@ public class PatientService {
         billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString(),
                 newPatient.getName(), newPatient.getEmail());
 
+        kafkaProducer.sendEvent(newPatient);
 
         return PatientMapper.toDTO(newPatient);
     }
