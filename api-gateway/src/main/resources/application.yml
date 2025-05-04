@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: api-gateway
+
   cloud:
     gateway:
       routes:
@@ -14,7 +15,6 @@ spring:
           filters:
             - StripPrefix=1
 
-        # Route for /api/patients/** to patient-service
         - id: patient-service-route
           uri: http://patient-service:4000
           predicates:
@@ -22,12 +22,28 @@ spring:
           filters:
             - StripPrefix=1
             - JwtValidation
-              
-        # Route for /api/docs/patients to patient-service /v3/api-docs
-        - id: api-docs-patient-route
+
+        # Serve OpenAPI spec for patient-service via gateway
+        - id: api-docs-patient-json
           uri: http://patient-service:4000
           predicates:
-            - Path=/api-docs/patients
+            - Path=/v3/api-docs/patient
           filters:
-            - RewritePath=/api-docs/patients,/v3/api-docs
+            - RewritePath=/v3/api-docs/patient,/v3/api-docs
 
+        # Serve OpenAPI spec for auth-service via gateway
+        - id: api-docs-auth-json
+          uri: http://auth-service:4005
+          predicates:
+            - Path=/v3/api-docs/auth
+          filters:
+            - RewritePath=/v3/api-docs/auth,/v3/api-docs
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: patient-service
+        url: /v3/api-docs/patient
+      - name: auth-service
+        url: /v3/api-docs/auth
