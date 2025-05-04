@@ -2546,3 +2546,8 @@
 /db_volumes/auth-service-db/postgresql.conf
 /db_volumes/auth-service-db/postmaster.opts
 /db_volumes/auth-service-db/postmaster.pid
+/db_volumes/auth-service-db/base/16384/16389
+/db_volumes/auth-service-db/base/16384/16392
+/db_volumes/auth-service-db/base/16384/16393
+/db_volumes/auth-service-db/base/16384/16394
+/db_volumes/auth-service-db/base/16384/16396
